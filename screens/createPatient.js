@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Button,SafeAreaView,ScrollView,StyleSheet,View,Text}from 'react-native';
+import {Button,ScrollView,StyleSheet,View,Text}from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {TextInput, Checkbox,IconButton,MD3Colors} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';   
 import {Dropdown} from 'react-native-element-dropdown';
@@ -10,12 +11,14 @@ import realm from '../database/patientSchema';
 //Time Related
 let nextTime = 0;
 let dayTimVal = " ";
-let mondaytime = 'Monday Time   ';
-let tuestime = 'Tuesday Time    ';
+let upcommingDay = " ";
+let mondaytime = 'Monday Time';
+let tuestime = 'Tuesday Time';
 let wednestime = 'WednesdayTime';
-let thrustime = 'Thursday Time  ';
-let fritime = 'Friday Time      ';
+let thrustime = 'Thursday Time';
+let fritime = 'Friday Time';
 let saturdaytime = 'SaturdayTime';
+
 
 const data = [
   {lable:"Select Time",value:"Select Time"},
@@ -59,7 +62,16 @@ const CreatePatient = ({navigation}) => {
   const [value, setValue] = useState();
   const [valname,setvalname] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
+  
+  const resetDropdown = () =>{
+     mondaytime = 'Monday Time';
+     tuestime = 'Tuesday Time';
+     wednestime = 'WednesdayTime';
+     thrustime = 'Thursday Time';
+     fritime = 'Friday Time';
+     saturdaytime = 'SaturdayTime';
 
+  }
   const addPatient = () => {
     let _id = Date.now().toString();
     let date2 = Birthdate.toDateString(' ');
@@ -73,7 +85,7 @@ const CreatePatient = ({navigation}) => {
         parentName: parentName,
         whatsAppNo: whatsAppNo,
         secondaryNo: secondaryNo,
-        status: 'Open',
+        status: upcommingDay,
         dayTime: dayTimVal
 
       });
@@ -85,7 +97,7 @@ const CreatePatient = ({navigation}) => {
   return (
     <View>
       <ScrollView>
-        <SafeAreaView>
+        <SafeAreaProvider>
         <IconButton  icon="home" style={{position:"absolute",marginLeft:-1}} iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('Dashboard')}}  />
         <IconButton icon="doctor" style={{marginLeft:300}} iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('TherapistProfile')}}/>
           <Text style={styles.headlineLarge}>Create Profile</Text>
@@ -459,8 +471,10 @@ const CreatePatient = ({navigation}) => {
               onPress={ async () => {
                 setday(day),
                 dayTimVal = JSON.stringify(valname),
+                upcommingDay = valname[0].day;
                 setvalname(dayTimVal),
                 addPatient(),
+                resetDropdown(),
                 navigation.navigate('Dashboard'),
                 nextTime = 0;
                 console.log(...valname);
@@ -470,7 +484,7 @@ const CreatePatient = ({navigation}) => {
             </Button>
             
           </View>
-        </SafeAreaView>
+        </SafeAreaProvider>
       </ScrollView>
     </View>
   );
@@ -571,7 +585,7 @@ textInputStyle:{
 
   headlineLarge: {
     color: 'grey',
-    fontFamily: 'FontFamily',
+  
     fontSize: 32,
     fontWeight: '400',
     letterSpacing: 0,
@@ -581,7 +595,7 @@ textInputStyle:{
 
   subHeading: {
     color: 'blue',
-    fontFamily: 'FontFamily',
+    
     alignContent:"center",
     fontSize: 20,
     fontWeight: '600',

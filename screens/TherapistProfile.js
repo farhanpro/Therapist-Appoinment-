@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   StyleSheet,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     },
     headlineLarge: {
         color: 'grey',
-        fontFamily: 'FontFamily',
+      
         fontSize: 32,
         fontWeight: '400',
         letterSpacing: 0,

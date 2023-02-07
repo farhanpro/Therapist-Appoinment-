@@ -1,11 +1,12 @@
-import {  Text, View,FlatList,TouchableOpacity} from 'react-native';
+import {  Text, View,FlatList,TouchableOpacity,Linking} from 'react-native';
 import React,{useState} from 'react';
-import realm, { getAllPatients,fetchPaymentInfo} from "../database/patientSchema";
+import { getAllPatients,fetchPaymentInfo} from "../database/patientSchema";
 import {Picker} from '@react-native-picker/picker';
 import { TextInput,IconButton, MD3Colors } from 'react-native-paper';
 
 
 const PaymentReminder = ({navigation}) => {
+  
   const [name,_id] = getAllPatients();
   const data =getAllPatients();
   const nameList = data.map(name => name.name );
@@ -13,6 +14,22 @@ const PaymentReminder = ({navigation}) => {
   const paymentInfo = fetchPaymentInfo(selectedValue);
   const unpaidamount = paymentInfo.length * 1200;
 
+
+  const onClick = () => {
+    const message = 'Hello, how are you?';
+    const phoneNumber = '+917798286678';
+    const url = `https://graph.facebook.com/v15.0/106662529010732/messages `;
+  
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          console.log("Don't know how to open URI: " + url);
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
   
   return (
     <View>
@@ -38,7 +55,7 @@ const PaymentReminder = ({navigation}) => {
             <Text style={styles.cell}>{item.time}</Text>
           </View>
         )}
-        keyExtractor={(item,index) => index.toString()}
+        keyExtractor={(index) => index.toString()}
       />
       <Text style={{fontSize:20,color:"black",margin:20,marginLeft:80}} > Unpaid Amount : {unpaidamount}</Text>
 
@@ -48,13 +65,13 @@ const PaymentReminder = ({navigation}) => {
           
       />
           
-    <TouchableOpacity style={styles.button} onPress={console.log("Pressed")}>
+    <TouchableOpacity style={styles.button} onPress={onClick }>
       <Text style={styles.buttonText}>Send Reminder </Text>
     </TouchableOpacity>
     <Text style={{color:"black",marginLeft:50}}>This will send WhatsApp message to Parent</Text>
     <View style={styles.icons}>
-                <IconButton  icon="plus-box" iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}  />
-                <IconButton  icon="home"  iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('Dashboard')}}  />
+      <IconButton  icon="plus-box" iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}/>
+      <IconButton  icon="home"  iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('Dashboard')}}/>
                 </View>
     </View>
 )

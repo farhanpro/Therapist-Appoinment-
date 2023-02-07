@@ -1,12 +1,12 @@
 import Realm from 'realm';
 import moment from 'moment';
 
-export const daytime={
+export const daytime={ 
     name:'daytime',
     embedded:true,
     properties:{
       day:{type: 'list', objectType: 'string'},
-      time:{type: 'list', objectType: 'string'}
+      time:{type: 'list', objectType: 'string'} 
     }
 }
 
@@ -76,7 +76,6 @@ export let completedSession = (session_Id,patient_Id,date,time,notes,paid)=>
   realm.write(()=>{
     const markedSession = realm.create('completedSessionsd',
     {
-      
       session_Id:session_Id,
       patient_Id:patient_Id,
       date:date,
@@ -90,7 +89,9 @@ export let completedSession = (session_Id,patient_Id,date,time,notes,paid)=>
 
 export const getTodaysPatients =()=>
 {
-  let todaysAppoinments = realm.objects("PatientTable").filtered(`dayTime != '[]'`);
+  let today = moment().format('dddd'); 
+  console.log(today)
+  let todaysAppoinments = realm.objects("PatientTable").filtered(`dayTime != '[]' && status == '${today}'`);
   return todaysAppoinments;
 }
 
@@ -104,7 +105,6 @@ export const  fetchPatientById = (item) =>
 export const getpatient = ()=>{ return myTask;}
 
 //For fetching All Session info of an spefic paitent 
-
 export const fetchPaymentInfo = (itemValue) =>
 {
   let userinfo = realm.objects("PatientTable").filtered(`name == '${itemValue}'`);
@@ -135,8 +135,11 @@ export let  deleteAllMrkCmplt = ()=>{realm.write(()=>{ realm.delete(getMarkedSee
 export let getTherapist = () => {return realm.objects('TherapistProfile')}
 export let  deleteAllTherapist = ()=>{realm.write(()=>{ realm.delete(getTherapist());})}
 
+//Delete all patient data 
+export const  getAllPatients = () => {return realm.objects('PatientTable');} 
+export const  deleteAllPatients = () => {realm.write(()=>{realm.delete(getAllPatients());})}
 
-
+//Delete Single Patient
 export const deletePatient =(item) =>{
     realm.write(() =>{
       try{
@@ -157,16 +160,29 @@ export const deletePatient =(item) =>{
 export const deleteDaytime = (patient_Id) => 
 {
     const patient = realm.objectForPrimaryKey("PatientTable", patient_Id);
-    console.log("Patietn",patient)
+    console.log("Patietn comming from deleteDayTime",patient)
     let obj = JSON.parse(patient.dayTime);
-     obj.shift()
+    obj.shift()
     console.log("Object after delete",obj)
-     let obj2  = JSON.stringify(obj);
-     realm.write(()=>{patient.dayTime = obj2})
-     console.log(obj);
-}
+    realm.write(()=>
+    { 
+      if(obj.length == 0)
+      {
+        patient.status = 'Sunday'
+      }   
+      else 
+      {
+        patient.status =  obj[0].day;
+      }
+    })
+  
+    let obj2  = JSON.stringify(obj);
+    realm.write(()=>{patient.dayTime = obj2})
+    console.log(obj);
 
-export const  getAllPatients = () => {return realm.objects('PatientTable');}
+  }
+
+
 
 let realm =  new Realm({path:"PatientApp.realm",schema:[patientProfile,daytime, TherapistProfile,completedSessions],schemaVersion:0});
 export default realm;

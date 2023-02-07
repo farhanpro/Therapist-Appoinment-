@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
 
   headlineLarge: {
     color: 'grey',
-    fontFamily: 'FontFamily',
+    
     fontSize: 32,
     fontWeight: '400',
     letterSpacing: 0,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
 
   subHeading: {
     color: 'blue',
-    fontFamily: 'FontFamily',
+   
     alignContent:"center",
     fontSize: 20,
     fontWeight: '600',

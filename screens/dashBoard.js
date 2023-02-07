@@ -1,15 +1,15 @@
 import React ,{useState,useEffect}from "react";
-import {Text,FlatList,NativeModules,TouchableOpacity, SafeAreaView,StyleSheet,View,Alert} from 'react-native';
+import {Text,FlatList,TouchableOpacity, SafeAreaView,StyleSheet,View,Alert} from 'react-native';
 import realm, { getAllPatients,deletePatient,fetchPatientById,getTodaysPatients} from "../database/patientSchema";
 import {  Title,Card,IconButton, MD3Colors} from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Dashboard =({navigation})=>
 { 
     const [showConfirm, setShowConfirm] = useState(false);
     let temp = ' ';
-    
     
     const handleConfirm = () => {
         Alert.alert(
@@ -42,8 +42,8 @@ const Dashboard =({navigation})=>
     console.log(getAllPatients())
    
     return(
-        <SafeAreaView>
-            <Text style={{fontSize:25,color:"blue",margin:20}}>{date}</Text>    
+        <SafeAreaProvider>
+          <Text style={{fontSize:25,color:"blue",margin:20}}>{date}</Text>    
             <FlatList 
                 style={{marginTop:30}}
                 data = {patients}
@@ -77,7 +77,7 @@ const Dashboard =({navigation})=>
                 
                 </View>
         {/* {console.log(data._id)} */}
-    </SafeAreaView>
+    </SafeAreaProvider>
     );
 }
 
@@ -88,7 +88,7 @@ flexDirection: 'row',
 flexWrap: 'wrap',
 marginTop:600,
 position:"absolute",
-marginLeft: 180
+marginLeft: 140
 }
 })
 

@@ -38,7 +38,6 @@ const CompletedSessions = ({navigation}) => {
       }
       // Using 91 for India
       // You can change 91 with your country code
-      
       let url =
         'whatsapp://send?text=' + 
         whatsAppMessage +
@@ -191,7 +190,7 @@ const styles = StyleSheet.create({
    
     headlineLarge: {
       "color":"grey",
-      "fontFamily": "FontFamily",
+      
       "fontSize": 32,
       "fontWeight": "400",
       "letterSpacing": 0,
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
     subHeading :
     { 
         "color" : "blue",
-        "fontFamily": "FontFamily",
+     
       "fontSize": 20,
       "fontWeight": "600",
       "letterSpacing": 0,

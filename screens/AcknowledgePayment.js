@@ -1,19 +1,29 @@
-import {  Text, View,FlatList,TouchableOpacity,StyleSheet} from 'react-native';
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
+import { Text, View,FlatList,TouchableOpacity,StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { TextInput,IconButton, MD3Colors,Checkbox } from 'react-native-paper';
 import {getAllPatients,fetchPaymentInfo,acknowledgePayment,getMarkedSeessions} from '../database/patientSchema';
+import { useIsFocused } from '@react-navigation/native';
  
 
 
 
 const AcknowledgePayment = ({navigation}) => {
-   const [name,_id] = getAllPatients();
+  const [isFocused,setIsFocused] = useState(0);
+  const Focused = useIsFocused();
+  useEffect(()=>{<FlatList></FlatList>},[isFocused],Focused)
+  const [name,_id] = getAllPatients();
   const data =getAllPatients();
   const nameList = data.map(name => name.name );
   const [selectedValue,setSelectedValue] = useState(nameList[0]);
-  const [checked,setchecked] = useState(false);
+  
+  const [checked,setchecked] = useState([false]);
   const paymentInfo = fetchPaymentInfo(selectedValue);
+  const handleCheckboxPress = (index) => {
+    const newChecked = [...checked];
+    newChecked[index] = !newChecked[index];
+    setchecked(newChecked);
+  };
   console.log(getMarkedSeessions());
   return (
     <View>
@@ -32,15 +42,14 @@ const AcknowledgePayment = ({navigation}) => {
 
         <FlatList
         data={paymentInfo}
-        renderItem={({ item }) => (
+        renderItem={({ item , index }) => (
           <View style={styles.row}>
             {/* {console.log(item.date.toLocaleDateString())} */}
             <Text style={styles.cell}>{item.date.toLocaleDateString()}</Text>
-            <Text style={styles.cell}>{item.patient_Id}</Text>
+            <Text style={styles.cell}>1200</Text>
             <Checkbox
-                  status={checked ? 'checked' : 'unchecked'}
-                 onPress={()=>{setchecked(!checked),acknowledgePayment(item)}}
-                />
+                 status={checked[index] ? 'checked' : 'unchecked'}
+                 onPress={()=>{handleCheckboxPress(index),acknowledgePayment(item)}}/>
             
           
           </View>
@@ -107,6 +116,6 @@ const styles = {
   cell: {
     flex: 1,
     color:'black',
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }
