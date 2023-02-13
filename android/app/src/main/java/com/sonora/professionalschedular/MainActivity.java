@@ -1,4 +1,4 @@
-package com.docsappv4;
+package com.sonora.professionalschedular;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "docsAppV4";
+    return "ProfessionalSchedular";
   }
   @Override
 protected void onCreate(Bundle savedInstanceState) {

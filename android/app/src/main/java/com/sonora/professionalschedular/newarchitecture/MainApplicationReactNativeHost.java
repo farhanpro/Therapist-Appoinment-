@@ -1,4 +1,4 @@
-package com.docsappv4.newarchitecture;
+package com.sonora.professionalschedular.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.docsappv4.BuildConfig;
-import com.docsappv4.newarchitecture.components.MainComponentsRegistry;
-import com.docsappv4.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.sonora.professionalschedular.BuildConfig;
+import com.sonora.professionalschedular.newarchitecture.components.MainComponentsRegistry;
+import com.sonora.professionalschedular.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
