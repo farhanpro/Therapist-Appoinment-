@@ -1,8 +1,8 @@
-import {  Text, View,FlatList,TouchableOpacity,Linking} from 'react-native';
+import {Text, View,FlatList,TouchableOpacity,Linking} from 'react-native';
 import React,{useState} from 'react';
-import { getAllPatients,fetchPaymentInfo} from "../database/patientSchema";
+import {getAllPatients,fetchPaymentInfo} from "../database/patientSchema";
 import {Picker} from '@react-native-picker/picker';
-import { TextInput,IconButton, MD3Colors } from 'react-native-paper';
+import {TextInput,IconButton, MD3Colors } from 'react-native-paper';
 
 
 const PaymentReminder = ({navigation}) => {
@@ -10,21 +10,26 @@ const PaymentReminder = ({navigation}) => {
   const [name,_id] = getAllPatients();
   const data =getAllPatients();
   const nameList = data.map(name => name.name );
+  const [comments,setcomments] = useState(' '); 
   const [selectedValue,setSelectedValue] = useState(nameList[0]);
-  const paymentInfo = fetchPaymentInfo(selectedValue);
+  const {paymentInfo} = fetchPaymentInfo(selectedValue);
+  const {userinfo} = fetchPaymentInfo(selectedValue);
   const unpaidamount = paymentInfo.length * 1200;
 
-
   const onClick = () => {
-    const message = 'Hello, how are you?';
-    const phoneNumber = '+917798286678';
-    const url = `https://graph.facebook.com/v15.0/106662529010732/messages `;
+    console.log("User info ", userinfo);
+    console.log("Payment info ", paymentInfo);
+    const whatsAppMessage = `Hello Unpaid Amount of your child ${selectedValue} is ${unpaidamount} please pay it as soon as possible.
+                              Note : ${comments}`;
+    const mobileNumber = userinfo[0].whatsAppNo;
+    const url = 'whatsapp://send?text='+whatsAppMessage+'&phone=91'+mobileNumber;
   
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
           Linking.openURL(url);
-        } else {
+        } 
+        else {
           console.log("Don't know how to open URI: " + url);
         }
       })
@@ -36,10 +41,10 @@ const PaymentReminder = ({navigation}) => {
       <Text style={{fontSize:30,color:"black",margin:30}}>Payment Reminder</Text> 
       
         <Picker style={{color:"white",margin:30,backgroundColor: "skyblue"}} selectedValue={selectedValue}
-          onValueChange={(itemValue) => {setSelectedValue(itemValue),fetchPaymentInfo(itemValue)}}>
+          onValueChange={(itemValue) => {setSelectedValue(itemValue),fetchPaymentInfo(itemValue),console.log("Item value",itemValue)}}>
           {nameList.map((item, index) => (
           <Picker.Item key={index} label={item} value={item} />
-        ))}
+          ))}
         </Picker>  
 
         <View style={styles.headerRow}>
@@ -62,16 +67,18 @@ const PaymentReminder = ({navigation}) => {
       <TextInput  
               style={{width:300,height:100,marginLeft:30,backgroundColor:'transparent',borderColor:"black",borderWidth:2}}
               placeholder="Comments"
+              onChangeText={comments => setcomments(comments)}
           
       />
           
-    <TouchableOpacity style={styles.button} onPress={onClick }>
+    <TouchableOpacity style={styles.button} onPress={onClick}>
+      {console.log(selectedValue.whatsAppNo) }
       <Text style={styles.buttonText}>Send Reminder </Text>
     </TouchableOpacity>
     <Text style={{color:"black",marginLeft:50}}>This will send WhatsApp message to Parent</Text>
     <View style={styles.icons}>
-      <IconButton  icon="plus-box" iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}/>
-      <IconButton  icon="home"  iconColor={MD3Colors.error50} size={45}   onPress={() => {navigation.navigate('Dashboard')}}/>
+      <IconButton  icon="plus-box" iconColor={"#0096FF"} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}/>
+      <IconButton  icon="home"  iconColor={"#0096FF"} size={45}   onPress={() => {navigation.navigate('Dashboard')}}/>
                 </View>
     </View>
 )
@@ -94,8 +101,8 @@ const styles = {
     flex: 1,    
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop:110,
-    position:"relative",
+    marginTop:670,
+    position:"absolute",
     marginLeft: 210
     },
 

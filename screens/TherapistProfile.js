@@ -90,8 +90,8 @@ const TherapistProfile = ({navigation}) => {
         title = {"Save Therapist Profile"}
         />
       <View style={styles.icons}>
-      <IconButton  icon="plus-box" iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('CreatePatient')}}  />
-      <IconButton  icon="home" iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('Dashboard')}}  />
+      <IconButton  icon="plus-box" iconColor={"#0096FF"} size={40}  onPress={() => {navigation.navigate('CreatePatient')}}  />
+      <IconButton  icon="home" iconColor={"#0096FF"} size={40}  onPress={() => {navigation.navigate('Dashboard')}}  />
       </View>
     
     </View>

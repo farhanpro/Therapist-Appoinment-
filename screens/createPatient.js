@@ -21,7 +21,7 @@ let saturdaytime = 'SaturdayTime';
 
 
 const data = [
-  {lable:"Select Time",value:"Select Time"},
+   {lable: 'Select Time', value: 'Select Time'},
   {label: '09:00 - 10:00', value: '09:00 - 10:00'},
   {label: '10:00 - 11:00', value: '10:00 - 11:00'},
   {label: '11:00 - 12:00', value: '11:00 - 12:00'},
@@ -98,8 +98,8 @@ const CreatePatient = ({navigation}) => {
     <View>
       <ScrollView>
         <SafeAreaProvider>
-        <IconButton  icon="home" style={{position:"absolute",marginLeft:-1}} iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('Dashboard')}}  />
-        <IconButton icon="doctor" style={{marginLeft:300}} iconColor={MD3Colors.error50} size={40}  onPress={() => {navigation.navigate('TherapistProfile')}}/>
+        <IconButton  icon="home" style={{position:"absolute",marginLeft:-1}} iconColor={"#0096FF"} size={40}  onPress={() => {navigation.navigate('Dashboard')}}  />
+        <IconButton icon="doctor" style={{marginLeft:300}} iconColor={"#0096FF"} size={40}  onPress={() => {navigation.navigate('TherapistProfile')}}/>
           <Text style={styles.headlineLarge}>Create Profile</Text>
           <Text style={styles.subHeading}>Patient Info</Text>
 
@@ -121,6 +121,7 @@ const CreatePatient = ({navigation}) => {
             style ={{position:'absolute',marginLeft:280,marginTop:-5}}
             size={35}
             icon = "calendar"
+            iconColor={"#0096FF"}
             title="Birth Date"
             onPress={() => setOpen2(true)}
             />
@@ -152,6 +153,7 @@ const CreatePatient = ({navigation}) => {
             style ={{position:'absolute',marginLeft:280,marginTop:-5}}
               size={35}
               icon="calendar"
+              iconColor={"#0096FF"}
               title="Patient Since"
               onPress={() => setOpen(true)}
             />
@@ -293,7 +295,7 @@ const CreatePatient = ({navigation}) => {
                   status={Wedchecked ? 'checked' : 'unchecked'}
                   onPress={ () => {
                     
-                    day.push("WednesDay")
+                    day.push("Wednesday")
                      WedsetChecked(!Wedchecked);
                   }}
                 />
@@ -336,8 +338,8 @@ const CreatePatient = ({navigation}) => {
                 <Checkbox
                   status={Thruschecked ? 'checked' : 'unchecked'}
                   onPress={ () => {
-                     setname('Thrusday');
-                    day.push("Thrusday") 
+                     setname('Thursday');
+                    day.push("Thursday") 
                     ThrussetChecked(!Thruschecked);
                   }}
                 />
@@ -594,8 +596,7 @@ textInputStyle:{
   },
 
   subHeading: {
-    color: 'blue',
-    
+    color: "#0096FF",
     alignContent:"center",
     fontSize: 20,
     fontWeight: '600',

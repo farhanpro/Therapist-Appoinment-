@@ -27,8 +27,8 @@ const CompletedSessions = ({navigation}) => {
    let today = new Date().toDateString();
 
   //WhatsApp related 
-    const [mobileNumber,setMobileNumber] = useState(patients.whatsAppNo);
-    const [whatsAppMessage,sendWhatsAppMsg] = useState(`Session is Completed for your child  : ${patients.name} on ${new Date()}`); 
+    const mobileNumber = patients.whatsAppNo;
+    const whatsAppMessage = `Session is Completed for your child  : ${patients.name} on ${new Date()}`; 
 
     const initiateWhatsApp = () => {
       // Check for perfect 10 digit length
@@ -38,10 +38,7 @@ const CompletedSessions = ({navigation}) => {
       }
       // Using 91 for India
       // You can change 91 with your country code
-      let url =
-        'whatsapp://send?text=' + 
-        whatsAppMessage +
-        '&phone=91' + mobileNumber;
+      let url = 'whatsapp://send?text=' + whatsAppMessage +'&phone=91' + mobileNumber;
       Linking.openURL(url)
         .then((data) => {
           console.log('WhatsApp Opened');
@@ -158,13 +155,10 @@ const styles = StyleSheet.create({
       position:"relative",
       marginLeft: 215
   },
-    
-    
-
-   icon: {
+  icon: {
           marginRight: 5,
         },
-    label: {
+  label: {
           position: 'absolute',
           backgroundColor: 'white',
           left: 22,
@@ -187,41 +181,20 @@ const styles = StyleSheet.create({
           height: 40,
           fontSize: 16,
         },
-   
-    headlineLarge: {
-      "color":"grey",
-      
-      "fontSize": 32,
-      "fontWeight": "400",
-      "letterSpacing": 0,
-      "lineHeight": 40,
-      "marginLeft":80
-    },
-    subHeading :
-    { 
-        "color" : "blue",
-     
-      "fontSize": 20,
-      "fontWeight": "600",
-      "letterSpacing": 0,
-      "lineHeight": 40,
-       "marginLeft":100
-    },
-    
-      sectionContainer: {
+    sectionContainer: {
         marginTop: 32,
         paddingHorizontal: 24,
       },
-      sectionTitle: {
+    sectionTitle: {
         fontSize: 24,
         fontWeight: '600',
       },
-      sectionDescription: {
+    sectionDescription: {
         marginTop: 8,
         fontSize: 18,
         fontWeight: '400',
       },
-      highlight: {
+    highlight: {
         fontWeight: '700',
       },
 })

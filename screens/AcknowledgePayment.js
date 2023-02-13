@@ -1,30 +1,35 @@
-import React,{useState,useEffect} from 'react';
-import { Text, View,FlatList,TouchableOpacity,StyleSheet} from 'react-native';
+import React,{useState} from 'react';
+import { Text, View,FlatList,Button} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import { TextInput,IconButton, MD3Colors,Checkbox } from 'react-native-paper';
+import { IconButton, MD3Colors,Checkbox } from 'react-native-paper';
 import {getAllPatients,fetchPaymentInfo,acknowledgePayment,getMarkedSeessions} from '../database/patientSchema';
-import { useIsFocused } from '@react-navigation/native';
- 
+
 
 
 
 const AcknowledgePayment = ({navigation}) => {
-  const [isFocused,setIsFocused] = useState(0);
-  const Focused = useIsFocused();
-  useEffect(()=>{<FlatList></FlatList>},[isFocused],Focused)
+ 
   const [name,_id] = getAllPatients();
   const data =getAllPatients();
   const nameList = data.map(name => name.name );
-  const [selectedValue,setSelectedValue] = useState(nameList[0]);
-  
-  const [checked,setchecked] = useState([false]);
-  const paymentInfo = fetchPaymentInfo(selectedValue);
+  //const [nameList] = data.map( (name,index) => {[name,index]})
+  let counter = 0;
+  const [selectedValue,setSelectedValue] = useState(nameList[counter]);
+  const [checked,setchecked] = useState([false,false,false,false,false,false,false]);
+  const [values,setvalues] = useState([])
+  const {paymentInfo} = fetchPaymentInfo(selectedValue);
+  const pendingPayment = paymentInfo.length * 1200;
+
   const handleCheckboxPress = (index) => {
     const newChecked = [...checked];
     newChecked[index] = !newChecked[index];
+    values.push(counter++),
     setchecked(newChecked);
   };
-  console.log(getMarkedSeessions());
+  
+  console.log("Get Marked Sessions",getMarkedSeessions());
+  console.log("Get Payment Info",paymentInfo);
+  
   return (
     <View>
        <Text style={{fontSize:25,color:"black",margin: 30}}>Acknowledge Payment.</Text>
@@ -44,19 +49,26 @@ const AcknowledgePayment = ({navigation}) => {
         data={paymentInfo}
         renderItem={({ item , index }) => (
           <View style={styles.row}>
-            {/* {console.log(item.date.toLocaleDateString())} */}
             <Text style={styles.cell}>{item.date.toLocaleDateString()}</Text>
             <Text style={styles.cell}>1200</Text>
             <Checkbox
                  status={checked[index] ? 'checked' : 'unchecked'}
-                 onPress={()=>{handleCheckboxPress(index),acknowledgePayment(item)}}/>
-            
-          
+                  // onPress={()=>{handleCheckboxPress(index),acknowledgePayment(item)}}/>
+                  onPress={()=>{handleCheckboxPress(index),console.log(values)}}/> 
           </View>
         )}
         keyExtractor={(item,index) => index.toString()}
       />
+      <Text style={{fontSize:20,color:"black",margin:20,marginLeft:80}}>Unpaid Amount :  {pendingPayment}</Text>
+      <Button title="Save" onPress = {()=>{for(let i=0;i<values.length;i++){ acknowledgePayment(paymentInfo[i])} navigation.navigate('PatientHistory')}}>
 
+      </Button>
+          
+      <View style={styles.icons}>
+          <IconButton  icon="plus-box" iconColor={"#0096FF"} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}  />
+          <IconButton  icon="account-cash"  iconColor={"#0096FF"} size={45}   onPress={() => {navigation.navigate('PaymentReminder')}}  />
+          <IconButton  icon="home" iconColor={"#0096FF"} size={45}  onPress={() => {navigation.navigate('Dashboard')}}  />
+      </View>
 
     </View>
   )
@@ -82,7 +94,7 @@ const styles = {
     flexWrap: 'wrap',
     marginTop:110,
     position:"relative",
-    marginLeft: 210
+    marginLeft: 140
     },
 
   buttonText:

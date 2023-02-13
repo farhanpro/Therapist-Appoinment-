@@ -87,6 +87,7 @@ export let completedSession = (session_Id,patient_Id,date,time,notes,paid)=>
   })
 }
 
+//To get Appoinments for today's appoinments
 export const getTodaysPatients =()=>
 {
   let today = moment().format('dddd'); 
@@ -95,12 +96,14 @@ export const getTodaysPatients =()=>
   return todaysAppoinments;
 }
 
+
+
 //For Mark Session Complete to fetch patient data 
 var myTask = {};
 export const  fetchPatientById = (item) =>
 {
    myTask = realm.objectForPrimaryKey("PatientTable", item._id);
-   console.log(myTask);
+   
 }
 export const getpatient = ()=>{ return myTask;}
 
@@ -109,20 +112,47 @@ export const fetchPaymentInfo = (itemValue) =>
 {
   let userinfo = realm.objects("PatientTable").filtered(`name == '${itemValue}'`);
   let paymentInfo = realm.objects("completedSessionsd").filtered(`patient_Id == '${userinfo[0]._id}' && paid == false`);
-  return paymentInfo
+  return {userinfo,paymentInfo}
 }
-export const getPaymentInfo = ()=>
+
+
+// For fetching patient History 
+export const patientHistory = (itemValue) => 
 {
+  let userinfo = realm.objects("PatientTable").filtered(`name == '${itemValue}'`);
+  let  paymentInfo = realm.objects("completedSessionsd").filtered(`patient_Id == '${userinfo[0]._id}' `);
   return paymentInfo;
 }
 
+//for exporting data to 
+export const exportDataEmail = (itemValue) =>
+{
+  let userinfo = realm.objects("PatientTable").filtered(`name == '${itemValue}'`);
+  let  paymentInfo = realm.objects("completedSessionsd").filtered(`patient_Id == '${userinfo[0]._id}' `);
+  let toExportData = [];
+  toExportData.push(paymentInfo,toExportData);
+
+  return toExportData;
+
+} 
+
+//to get paymet not paid list in exporting data to email 
+export const unpaidSessions =()=>
+{
+  let unpaidSessions = realm.objects("completedSessionsd").filtered(`paid == false`);
+  console.log(unpaidSessions)
+  return unpaidSessions;
+}
+
 //for acknowledge payments
-export const  acknowledgePayment = (item)=>
+export const  acknowledgePayment = (paymentInfo)=>
 {
   realm.write(()=>{
-    paymentdone = realm.objects('completedSessionsd').filtered(`session_Id == '${item.session_Id}'`)[0];
+    
+    paymentdone =  realm.objects('completedSessionsd').filtered(`session_Id == '${paymentInfo.session_Id}'`)[0];
+    console.log(paymentdone);
     paymentdone.paid = true;
-    console.log(item.paid);
+    console.log(paymentInfo);
   })
 
 }
@@ -135,8 +165,10 @@ export let  deleteAllMrkCmplt = ()=>{realm.write(()=>{ realm.delete(getMarkedSee
 export let getTherapist = () => {return realm.objects('TherapistProfile')}
 export let  deleteAllTherapist = ()=>{realm.write(()=>{ realm.delete(getTherapist());})}
 
-//Delete all patient data 
+//To get all Patient 
 export const  getAllPatients = () => {return realm.objects('PatientTable');} 
+
+//Delete all patient data 
 export const  deleteAllPatients = () => {realm.write(()=>{realm.delete(getAllPatients());})}
 
 //Delete Single Patient
