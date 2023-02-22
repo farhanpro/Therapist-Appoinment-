@@ -21,8 +21,8 @@ const App = () => {
       }}
       >
         
-          <Stack.Screen name= "Dashboard" component={DashBoard}/>  
           <Stack.Screen name = "CreatePatient" component={CreatePatient}/>  
+          <Stack.Screen name= "Dashboard" component={DashBoard}/>  
          <Stack.Screen name="TherapistProfile" component={TherapistProfile}/> 
         <Stack.Screen name="completedSession" component={CompletedSessions}/> 
         <Stack.Screen name= "PaymentReminder" component={PaymentReminder}/>

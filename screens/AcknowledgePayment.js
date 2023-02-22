@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { Text, View,FlatList,Button} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import { IconButton, MD3Colors,Checkbox } from 'react-native-paper';
+import { IconButton, Checkbox } from 'react-native-paper';
 import {getAllPatients,fetchPaymentInfo,acknowledgePayment,getMarkedSeessions} from '../database/patientSchema';
 
 
@@ -27,8 +27,8 @@ const AcknowledgePayment = ({navigation}) => {
     setchecked(newChecked);
   };
   
-  console.log("Get Marked Sessions",getMarkedSeessions());
-  console.log("Get Payment Info",paymentInfo);
+  //console.log("Get Marked Sessions",getMarkedSeessions());
+  //console.log("Get Payment Info",paymentInfo);
   
   return (
     <View>
@@ -54,15 +54,17 @@ const AcknowledgePayment = ({navigation}) => {
             <Checkbox
                  status={checked[index] ? 'checked' : 'unchecked'}
                   // onPress={()=>{handleCheckboxPress(index),acknowledgePayment(item)}}/>
-                  onPress={()=>{handleCheckboxPress(index),console.log(values)}}/> 
+                  onPress={()=>{handleCheckboxPress(index)//console.log(values)
+                }}/> 
           </View>
         )}
         keyExtractor={(item,index) => index.toString()}
       />
       <Text style={{fontSize:20,color:"black",margin:20,marginLeft:80}}>Unpaid Amount :  {pendingPayment}</Text>
-      <Button title="Save" onPress = {()=>{for(let i=0;i<values.length;i++){ acknowledgePayment(paymentInfo[i])} navigation.navigate('PatientHistory')}}>
-
-      </Button>
+      <Button title="Save" onPress = {()=>{for(let i=0;i<values.length;i++)
+      {
+        acknowledgePayment(paymentInfo)} 
+      navigation.navigate('PatientHistory')}}></Button>
           
       <View style={styles.icons}>
           <IconButton  icon="plus-box" iconColor={"#0096FF"} size={45}   onPress={() => {navigation.navigate('CreatePatient')}}  />

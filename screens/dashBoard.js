@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Dashboard =({navigation})=>
 { 
+  console.log(getAllPatients());
     const [showConfirm, setShowConfirm] = useState(false);
     let temp = ' ';
     
@@ -39,7 +40,9 @@ const Dashboard =({navigation})=>
 
     var date = moment() .utcOffset('+05:30') .format('llll');
     let patients = getTodaysPatients();
-    console.log(getAllPatients())
+    // let patients = getAllPatients();
+     console.log("Patients[0]",patients[0].dayTime[0].time)
+     console.log("Patients[1]",patients[0])
    
     return(
         <SafeAreaProvider>
@@ -53,7 +56,7 @@ const Dashboard =({navigation})=>
                     <Card.Content><Title>{item.name}</Title></Card.Content>
                     <Card.Actions style ={{marginRight:15}}>
                     <IconButton icon ="watch" size={15} onPress={()=>{navigation.navigate('PatientHistory')}} color="#0000FF"/>
-                    {/* <IconButton icon="delete" iconColor={MD3Colors.error50} size={15} onPress={() => {handleConfirm(),temp = item}}/> */}
+                    <IconButton icon="delete" iconColor={MD3Colors.error50} size={15} onPress={() => {handleConfirm(),temp = item}}/>
                     <IconButton icon="send"  size={15} onPress={() => {fetchPatientById(item),navigation.navigate('completedSession')}}/>
                     
                     {showConfirm && (

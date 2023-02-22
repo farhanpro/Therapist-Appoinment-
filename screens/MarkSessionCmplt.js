@@ -22,8 +22,9 @@ import { Dropdown } from 'react-native-element-dropdown';
 const CompletedSessions = ({navigation}) => {
   
    let patients = getpatient()
-   let dayTimeObj = JSON.parse(patients.dayTime);
-   let selectedTime = dayTimeObj[0].time;
+   let dayTimeObj = patients.dayTime[0].time;
+   let selectedTime = dayTimeObj;
+   console.log("DayTime Obj",dayTimeObj);
    let today = new Date().toDateString();
 
   //WhatsApp related 

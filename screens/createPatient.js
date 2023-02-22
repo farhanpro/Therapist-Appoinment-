@@ -70,8 +70,9 @@ const CreatePatient = ({navigation}) => {
      thrustime = 'Thursday Time';
      fritime = 'Friday Time';
      saturdaytime = 'SaturdayTime';
-
   }
+
+
   const addPatient = () => {
     let _id = Date.now().toString();
     let date2 = Birthdate.toDateString(' ');
@@ -86,7 +87,7 @@ const CreatePatient = ({navigation}) => {
         whatsAppNo: whatsAppNo,
         secondaryNo: secondaryNo,
         status: upcommingDay,
-        dayTime: dayTimVal
+        dayTime: valname
 
       });
     });
