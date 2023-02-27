@@ -11,8 +11,8 @@ const PatientHistory = ({navigation}) => {
   const nameList = data.map(name => name.name);
   const [selectedValue,setSelectedValue] = useState(nameList[0]);
   const paymentInfo = patientHistory(selectedValue) ;
-  console.log("payment info",paymentInfo);
-  console.log("user info",userinfo);
+  //console.log("payment info",paymentInfo);
+  //console.log("user info",userinfo);
   const {userinfo} = fetchPaymentInfo(selectedValue);
 //const unpaidamount = paymentInfo.length * 1200;
   
@@ -21,7 +21,8 @@ const PatientHistory = ({navigation}) => {
       <Text style={{fontSize:30,color:"black",margin:30}}>Patient History</Text> 
       
         <Picker style={{color:"white",margin:30,backgroundColor: "#0096FF"}} selectedValue={selectedValue}
-          onValueChange={(itemValue) => {setSelectedValue(itemValue),fetchPaymentInfo(itemValue),console.log("Item value",itemValue)}}>
+          onValueChange={(itemValue) => {setSelectedValue(itemValue),fetchPaymentInfo(itemValue)//console.log("Item value",itemValue)
+        }}>
           {nameList.map((item, index) => (
           <Picker.Item key={index} label={item} value={item} />
           ))}
@@ -36,13 +37,14 @@ const PatientHistory = ({navigation}) => {
         data={paymentInfo}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            {console.log(item.date.toDateString())}
+            {//console.log(item.date.toDateString())
+            }
             <Text style={styles.cell}>{item.date.toDateString()}</Text>
             <Text style={styles.cell}>1200</Text>
             <Text style={styles.cell}>{item.paid.toString()}</Text>
           </View>
         )}
-        keyExtractor={(index) => index.toString()}
+        keyExtractor={(item) => item.session_Id}
       />
       
 

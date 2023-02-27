@@ -1,6 +1,6 @@
 import React ,{useState,useEffect}from "react";
 import {Text,FlatList,TouchableOpacity, SafeAreaView,StyleSheet,View,Alert} from 'react-native';
-import realm, { getAllPatients,deletePatient,fetchPatientById,getTodaysPatients,fetchPaymentInfo} from "../database/patientSchema";
+import  { deleteAllPatients,getAllPatients,deletePatient,fetchPatientById,getTodaysPatients,fetchPaymentInfo} from "../database/patientSchema";
 import {  Title,Card,IconButton, MD3Colors} from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
@@ -8,41 +8,36 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Dashboard =({navigation})=>
 { 
-  console.log(getAllPatients());
     const [showConfirm, setShowConfirm] = useState(false);
     let temp = ' ';
     
     const handleConfirm = () => {
         Alert.alert(
           'Confirm','Are you sure you want to continue?',
-          [
-            {
+          [{
               text: 'Cancel',
               onPress: () => setShowConfirm(false),
               style: 'cancel',
             },
             {
               text: 'OK',
-              onPress: () => {
+              onPress: () => 
+              {
                 deletePatient(temp),setIsFocused(isFocused +  1),
                 setShowConfirm(false);
               },
-            },
-          ],
+            },],
           { cancelable: false },
         );
       };
-
+       
 
     const [isFocused,setIsFocused] = useState(0);
     const Focused = useIsFocused();
     useEffect(() => {<FlatList></FlatList> }, [isFocused],Focused);
-
     var date = moment() .utcOffset('+05:30') .format('llll');
     let patients = getTodaysPatients();
-    // let patients = getAllPatients();
-     console.log("Patients[0]",patients[0].dayTime[0].time)
-     console.log("Patients[1]",patients[0])
+   //console.log("Get all patients: ",getAllPatients());
    
     return(
         <SafeAreaProvider>
@@ -68,7 +63,7 @@ const Dashboard =({navigation})=>
                       </View>
                     )}
 
-                    <IconButton icon="application-edit" mode='outlined' onPress={() => {navigation.navigate('TherapistProfile')}} size={15} />
+                    {/* <IconButton icon="application-edit" mode='outlined' onPress={() => {navigation.navigate('TherapistProfile')}} size={15} /> */}
                     </Card.Actions>
                     </Card>
                     )}
@@ -80,7 +75,7 @@ const Dashboard =({navigation})=>
                 <IconButton  icon="cash-marker"   size={40}  iconColor={"#0096FF"} onPress={() => {navigation.navigate('AcknowledgePayment')}}  />
                 <IconButton icon ="watch" size={35} iconColor={"#0096FF"} onPress={()=>{navigation.navigate('PatientHistory')}}/>
                 </View>
-        {/* {console.log(data._id)} */}
+        {/* {//console.log(data._id)} */}
     </SafeAreaProvider>
     );
 }

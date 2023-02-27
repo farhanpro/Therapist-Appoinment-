@@ -83,15 +83,27 @@ export let completedSession = (session_Id,patient_Id,date,time,notes,paid,) => {
   });
 };
 
-// function fo fetch unpaid patients 
-export const getUnpaidPatients = () =>{
-  let unpaidPatientsData = realm.objects('completedSessionsd').filtered(`paid == false`); 
-  // let data = unpaidPatientsData.map(item => item.patient_Id)
-  // //console.log(data);
+//function to handle undefined error from in payment reminder  
+export const handleUndefinedErrors = () =>
+{
   
-  let  getDetails  = realm.objects('PatientTable').filtered(`_id == "${unpaidPatientsData[0].patient_Id}" `);
-  console.log("From get details function :=",getDetails.name )
-  return getDetails;
+
+}
+
+// function fo fetch unpaid patients 
+export const  getUnpaidPatients = () =>{
+  let unpaidPatientsData = realm.objects('completedSessionsd').filtered(`paid == false`); 
+  let data = unpaidPatientsData.map(item => item.patient_Id)  
+  function removeDublicate(data) { return data.filter((item,index)=>data.indexOf(item)=== index)}
+  console.log('unique data : ', removeDublicate(data));
+  var MyData = [];
+  for(let i=0;i<removeDublicate(data).length;i++)
+  {  
+  let  getDetail = realm.objects('PatientTable').filtered(` _id == '${removeDublicate(data)[i]}' `);
+  MyData.push(  getDetail[0].name);
+  }
+  console.log("Get Details outside of loop :",MyData);
+  return MyData;
 }
 
 //To get Appoinments for today's appoinments
@@ -99,9 +111,8 @@ export const getTodaysPatients = () => {
   let today = moment().format('dddd');
   let now = new Date();
   let hours = ((now.getHours()) % 12 || 12 )  ;
-  //let hours2 = (now2.getHours() % 12 || 12 + 1);
   let hours2 = ((now.getHours()+1)  % 12 || 12 ) ;
-
+  //let hours2 = (now2.getHours() % 12 || 12 + 1);
   //console.log(today)
   //console.log(hours);
   //console.log(hours2);
@@ -124,7 +135,7 @@ export const getpatient = () => {
 //For fetching All Session info of an spefic paitent
 export const fetchPaymentInfo = itemValue => {
   let userinfo = realm.objects('PatientTable').filtered(`name == '${itemValue}'`);
-  console.log("User Info : ",userinfo);
+ // console.log("User Info : ",userinfo);
   let paymentInfo = realm.objects('completedSessionsd').filtered(`patient_Id == '${userinfo[0]._id}' && paid == false`);
   return {userinfo, paymentInfo};
 };
@@ -238,7 +249,6 @@ export const deleteDaytime = patient_Id => {
         patient.status = obj[0].day;
         patient.time = obj[0].time;
       }});
-    
       let obj2 = JSON.stringify(obj);
       realm.write(() => {
       patient.dayTime = obj2;

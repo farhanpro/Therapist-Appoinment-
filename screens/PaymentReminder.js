@@ -1,26 +1,17 @@
 import {Text, View,FlatList,TouchableOpacity,Linking} from 'react-native';
 import React,{useState} from 'react';
-import {getAllPatients,fetchPaymentInfo} from "../database/patientSchema";
+import  {getAllPatients,getUnpaidPatients,fetchPaymentInfo} from "../database/patientSchema";
 import {Picker} from '@react-native-picker/picker';
-import {TextInput,IconButton, MD3Colors } from 'react-native-paper';
-
+import {TextInput,IconButton} from 'react-native-paper';
 
 const PaymentReminder = ({navigation}) => {
+  //Whatsapp related 
+  const [comments,setcomments] = useState(' ');
   
-  const [name,_id] = getAllPatients();
-  const data =getAllPatients();
-  const nameList = data.map(name => name.name );
-  const [comments,setcomments] = useState(' '); 
-  const [selectedValue,setSelectedValue] = useState(nameList[0]);
-  const {paymentInfo} = fetchPaymentInfo(selectedValue);
-  const {userinfo} = fetchPaymentInfo(selectedValue);
-  const unpaidamount = paymentInfo.length * 1200;
-
   const onClick = () => {
-    console.log("User info ", userinfo);
-    console.log("Payment info ", paymentInfo);
-    const whatsAppMessage = `Hello Unpaid Amount of your child ${selectedValue} is ${unpaidamount} please pay it as soon as possible.
-                              Note : ${comments}`;
+    //console.log("User info ", userinfo);
+    //console.log("Payment info ", paymentInfo);
+    const whatsAppMessage = `Hello Unpaid Amount of your child ${selectedValue} is ${unpaidamount} please pay it as soon as possible.Note : ${comments}`;
     const mobileNumber = userinfo[0].whatsAppNo;
     const url = 'whatsapp://send?text='+whatsAppMessage+'&phone=91'+mobileNumber;
   
@@ -33,20 +24,29 @@ const PaymentReminder = ({navigation}) => {
           console.log("Don't know how to open URI: " + url);
         }
       })
-      .catch((err) => console.error('An error occurred', err));
+      .catch((err) => console.error('An error occurred', err));  
   };
+
+
+//Fetching name in unpaid sessions related
+  const nameList = getUnpaidPatients();
+  console.log("Name List ",nameList);
+  const [selectedValue,setSelectedValue] = useState(nameList[0]);
+  const {paymentInfo} = fetchPaymentInfo(selectedValue);
+  //console.log("Payment Info ",paymentInfo);
+  const {userinfo} = fetchPaymentInfo(nameList [0]);
+  const unpaidamount = paymentInfo.length * 1200;
   
   return (
     <View>
       <Text style={{fontSize:30,color:"black",margin:30}}>Payment Reminder</Text> 
-      
-        <Picker style={{color:"white",margin:30,backgroundColor: "skyblue"}} selectedValue={selectedValue}
+      <Picker style={{color:"white",margin:30,backgroundColor: "skyblue"}} selectedValue={selectedValue}
           onValueChange={(itemValue) => {setSelectedValue(itemValue),fetchPaymentInfo(itemValue),console.log("Item value",itemValue)}}>
           {nameList.map((item, index) => (
           <Picker.Item key={index} label={item} value={item} />
           ))}
         </Picker>  
-
+          
         <View style={styles.headerRow}>
         <Text style={styles.headerCell}>Date</Text>
         <Text style={styles.headerCell}>Time</Text>
@@ -55,12 +55,14 @@ const PaymentReminder = ({navigation}) => {
         data={paymentInfo}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            {console.log(item.date.toDateString())}
+            {//console.log(item.date.toDateString())
+            }
+           
             <Text style={styles.cell}>{item.date.toDateString()}</Text>
             <Text style={styles.cell}>{item.time}</Text>
           </View>
         )}
-        keyExtractor={(index) => index.toString()}
+        keyExtractor={item => item.session_Id}
       />
       <Text style={{fontSize:20,color:"black",margin:20,marginLeft:80}} > Unpaid Amount : {unpaidamount}</Text>
 
@@ -72,7 +74,8 @@ const PaymentReminder = ({navigation}) => {
       />
           
     <TouchableOpacity style={styles.button} onPress={onClick}>
-      {console.log(selectedValue.whatsAppNo) }
+      {//console.log(selectedValue.whatsAppNo) 
+      }
       <Text style={styles.buttonText}>Send Reminder </Text>
     </TouchableOpacity>
     <Text style={{color:"black",marginLeft:50}}>This will send WhatsApp message to Parent</Text>
@@ -101,7 +104,7 @@ const styles = {
     flex: 1,    
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop:670,
+    marginTop:570,
     position:"absolute",
     marginLeft: 210
     },

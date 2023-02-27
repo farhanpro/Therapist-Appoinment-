@@ -2,19 +2,17 @@ import React,{useState} from 'react';
 import { Text, View,FlatList,Button} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { IconButton, Checkbox } from 'react-native-paper';
-import {getAllPatients,fetchPaymentInfo,acknowledgePayment,getMarkedSeessions} from '../database/patientSchema';
+import {getAllPatients,fetchPaymentInfo,acknowledgePayment,getMarkedSeessions,getUnpaidPatients} from '../database/patientSchema';
 
 
 
 
 const AcknowledgePayment = ({navigation}) => {
  
-  const [name,_id] = getAllPatients();
-  const data =getAllPatients();
-  const nameList = data.map(name => name.name );
+  const nameList = getUnpaidPatients();
   //const [nameList] = data.map( (name,index) => {[name,index]})
   let counter = 0;
-  const [selectedValue,setSelectedValue] = useState(nameList[counter]);
+  const [selectedValue,setSelectedValue] = useState(nameList[0]);
   const [checked,setchecked] = useState([false,false,false,false,false,false,false]);
   const [values,setvalues] = useState([])
   const {paymentInfo} = fetchPaymentInfo(selectedValue);
